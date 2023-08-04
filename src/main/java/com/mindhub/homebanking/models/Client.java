@@ -12,20 +12,20 @@ public class Client {
     //Long es un wrapper para  numeros de gran cantidad de digitos.
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native",      strategy = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private String email;
-    private String first_Name;
-    private String last_Name;
+    private String firstName;
+    private String lastName;
 
     public Client(){
 
     }
 
-    public Client(String email, String first_Name, String last_Name) {
+    public Client(String email, String firstName, String lastName) {
         this.email = email;
-        this.first_Name = first_Name;
-        this.last_Name = last_Name;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public Long getId() {
@@ -40,19 +40,19 @@ public class Client {
         this.email = email;
     }
 
-    public String getFirst_Name() {
-        return first_Name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_Name(String first_Name) {
-        this.first_Name = first_Name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_Name() {
-        return last_Name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_Name(String last_Name) {
-        this.last_Name = last_Name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

@@ -20,6 +20,10 @@ public class HomebankingApplication {
 			//anidado como en la documentación
 			clientRepository.save(new Client("melba@mindhub.com","Melba","Morel"));
 			clientRepository.save(new Client("espinosa@hotmail.com","Cristian","Espinosa"));
+			//no anidado como en el workshop
+			//Client client = new Client("melba@mindhub.com","Melba","Morel");
+
+			//clientRepository.save(client);
 		};
 
 	}
