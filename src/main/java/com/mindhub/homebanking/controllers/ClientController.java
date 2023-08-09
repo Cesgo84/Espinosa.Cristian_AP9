@@ -21,7 +21,6 @@ public class ClientController {
 
     @GetMapping("/clients")
     public List<ClientDTO> getClients() {
-        //desagregado para entenderlo mejor:
         List<Client> allClients = clientRepository.findAll();
 
         List<ClientDTO> convertedList = allClients
@@ -32,7 +31,7 @@ public class ClientController {
         return convertedList;
     }
 
-    @GetMapping("clients/{id}")
+    @GetMapping("/clients/{id}")
     public ClientDTO getClientById(@PathVariable long id){
         Optional<Client> clientOptional = clientRepository.findById(id);
         return new ClientDTO(clientOptional.get());

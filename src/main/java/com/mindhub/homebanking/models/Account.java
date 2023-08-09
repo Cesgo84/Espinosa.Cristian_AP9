@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -16,11 +18,16 @@ public class Account {
     private LocalDate date;
     private double balance;
 
-    //account's owner
+    //account's owner (upstream : señala al nivel superior, a quien pertenece)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Owner_Id")
     private Client owner;
 
+    //transaction's Set (downstream : señala al nivel inferior, a quienes estan bajo su pertenencia)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private Set<Transaction> transactions = new HashSet<>();
+
+    //constructors
     public Account() {
     }
 
@@ -30,6 +37,8 @@ public class Account {
         this.balance = balance;
     }
 
+    //getters & setters
+    //self
     public Long getId() {
         return id;
     }
@@ -58,6 +67,7 @@ public class Account {
         this.balance = balance;
     }
 
+    //upstream
     //@JsonIgnore alternativa para evitar recursividad pero no es practico para el manejo de datos
     public Client getOwner() {
         return owner;
@@ -65,5 +75,19 @@ public class Account {
 
     public void setOwner(Client owner) {
         this.owner = owner;
+    }
+
+    //downstream
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transaction.setAccount(this);
+        transactions.add(transaction);
     }
 }
