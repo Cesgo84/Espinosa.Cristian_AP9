@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 public class Client {
+    //attributes
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -15,8 +16,12 @@ public class Client {
     private String email;
     private String firstName;
     private String lastName;
+
+    //accounts's set
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
+
+    //constructors
     public Client(){
 
     }
@@ -27,6 +32,8 @@ public class Client {
         this.lastName = lastName;
     }
 
+    //getters & setters
+    //self
     public Long getId() {
         return id;
     }
@@ -55,6 +62,7 @@ public class Client {
         this.lastName = lastName;
     }
 
+    //downstream
     public Set<Account> getAccounts() {
         return accounts;
     }
