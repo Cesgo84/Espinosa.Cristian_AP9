@@ -23,7 +23,6 @@ public class Client {
 
     //constructors
     public Client(){
-
     }
 
     public Client(String email, String firstName, String lastName) {
@@ -71,6 +70,7 @@ public class Client {
         this.accounts = accounts;
     }
 
+    //methods
     public void addAccount(Account account) {
         account.setOwner(this);
         accounts.add(account);
