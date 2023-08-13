@@ -1,11 +1,12 @@
 package com.mindhub.homebanking.models;
 
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Loan {
@@ -15,10 +16,16 @@ public class Loan {
     private long Id;
     private String name;
     private double maxAmount;
+    //OneToMany w/ basic types
     @ElementCollection
     @Column(name="payments")
-    private List<Integer> payments=new ArrayList<>();
+    private List<Integer> payments = new ArrayList<>();
 
+    //clientLoan's set
+    @OneToMany(mappedBy = "loan_id", fetch = FetchType.EAGER)
+    private Set<ClientLoan> clients = new HashSet<>();
+
+    //constructors
     public Loan() {
     }
 
@@ -28,6 +35,8 @@ public class Loan {
         this.payments = payments;
     }
 
+    //getter & setter
+    //self
     public long getId() {
         return Id;
     }
@@ -48,11 +57,20 @@ public class Loan {
         this.maxAmount = maxAmount;
     }
 
+    //downstream
     public List<Integer> getPayments() {
         return payments;
     }
 
     public void setPayments(List<Integer> payments) {
         this.payments = payments;
+    }
+
+    public Set<ClientLoan> getClients() {
+        return clients;
+    }
+
+    public void setClients(Set<ClientLoan> clients) {
+        this.clients = clients;
     }
 }
