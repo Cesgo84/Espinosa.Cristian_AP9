@@ -27,7 +27,7 @@ public class AccountDTO {
         this.date = account.getDate();
         this.balance = account.getBalance();
 
-        // getting an transactionDTO for each transaction in transactions's set
+        // getting a transactionDTO for each transaction in transactions's set
         this.transactions = account.getTransactions()
                 .stream()
                 .map(transaction -> new TransactionDTO(transaction))

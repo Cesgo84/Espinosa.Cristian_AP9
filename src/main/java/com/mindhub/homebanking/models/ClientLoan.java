@@ -37,17 +37,9 @@ public class ClientLoan {
     }
 
     //getter & setter
-
+    //self
     public long getId() {
         return id;
-    }
-
-    public Integer getPayments() {
-        return payments;
-    }
-
-    public void setPayments(Integer payments) {
-        this.payments = payments;
     }
 
     public double getAmount() {
@@ -58,6 +50,15 @@ public class ClientLoan {
         this.amount = amount;
     }
 
+    public Integer getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Integer payments) {
+        this.payments = payments;
+    }
+
+    //upstream
     public Client getClient() {
         return client;
     }
