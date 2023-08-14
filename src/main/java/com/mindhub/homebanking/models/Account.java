@@ -86,6 +86,7 @@ public class Account {
         this.transactions = transactions;
     }
 
+    //methods
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);
