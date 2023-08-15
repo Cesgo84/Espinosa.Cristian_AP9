@@ -2,10 +2,7 @@ package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -15,43 +12,45 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-    private String cardholder;
+    private String cardHolder;
     private CardType type;
     private CardColor color;
     private String number;
     private int cvv;
-    private LocalDate thruDate;
     private LocalDate fromDate;
+    private LocalDate thruDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Client_Id")
+    private Client client;
 
     //constructor
-
     public Card() {
 
     }
 
-    public Card(String cardholder, CardType type, CardColor color, String number, int cvv, LocalDate thruDate, LocalDate fromDate) {
-        this.cardholder = cardholder;
+    public Card(String cardHolder, CardType type, CardColor color, String number, int cvv, LocalDate fromDate, LocalDate thruDate) {
+        this.cardHolder = cardHolder;
         this.type = type;
         this.color = color;
         this.number = number;
         this.cvv = cvv;
-        this.thruDate = thruDate;
         this.fromDate = fromDate;
+        this.thruDate = thruDate;
     }
 
     //getters & setters
     //self
-
     public long getId() {
         return id;
     }
 
-    public String getCardholder() {
-        return cardholder;
+    public String getCardHolder() {
+        return cardHolder;
     }
 
-    public void setCardholder(String cardholder) {
-        this.cardholder = cardholder;
+    public void setCardHolder(String cardHolder) {
+        this.cardHolder = cardHolder;
     }
 
     public CardType getType() {
@@ -100,6 +99,15 @@ public class Card {
 
     public void setFromDate(LocalDate fromDate) {
         this.fromDate = fromDate;
+    }
+
+    //upstream
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
 

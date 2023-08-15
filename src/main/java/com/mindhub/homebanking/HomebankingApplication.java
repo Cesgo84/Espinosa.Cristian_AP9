@@ -86,6 +86,15 @@ public class HomebankingApplication {
 			client2.addLoan(clientLoan4);
 			loan3.addClient(clientLoan4);
 			clientLoanRepository.save(clientLoan4);
+
+			//Cards
+			Card card1 = new Card("Melba Morel", CardType.DEBIT, CardColor.GOLD, "3325-6745-7876-4445", 990, LocalDate.now(),LocalDate.now().plusYears(5));
+			client1.addCard(card1);
+			cardRepository.save(card1);
+			Card card2 = new Card("Melba Morel",CardType.CREDIT,CardColor.TITANIUM,"2234-6745-5525-7888",750,LocalDate.now(),LocalDate.now().plusYears(5));
+			client1.addCard(card2);
+			cardRepository.save(card2);
+
 		};
 	}
 }
