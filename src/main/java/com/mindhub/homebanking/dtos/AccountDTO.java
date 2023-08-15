@@ -29,9 +29,9 @@ public class AccountDTO {
 
         // getting a transactionDTO for each transaction in transactions's set
         this.transactions = account.getTransactions()
-                .stream()
-                .map(transaction -> new TransactionDTO(transaction))
-                .collect(Collectors.toSet());
+                                    .stream()
+                                    .map(transaction -> new TransactionDTO(transaction))
+                                    .collect(Collectors.toSet());
     }
 
     //getters
@@ -51,12 +51,13 @@ public class AccountDTO {
         return balance;
     }
 
+    //downstream
     public Set<TransactionDTO> getTransactions() {
         return transactions;
     }
 
-    public Client getOwner() {
-        return owner;
-    }
+//    public Client getOwner() {
+//        return owner;
+//    }
 
 }
