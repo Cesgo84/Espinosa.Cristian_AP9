@@ -17,6 +17,7 @@ public class Client {
     private String email;
     private String firstName;
     private String lastName;
+    private String password;
 
     //accounts's set
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
@@ -34,10 +35,11 @@ public class Client {
     public Client(){
     }
 
-    public Client(String email, String firstName, String lastName) {
+    public Client(String email, String firstName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
     }
 
     //getters & setters
@@ -68,6 +70,14 @@ public class Client {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     //downstream
