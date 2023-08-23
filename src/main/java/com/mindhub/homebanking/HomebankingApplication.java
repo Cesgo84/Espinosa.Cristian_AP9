@@ -3,16 +3,20 @@ package com.mindhub.homebanking;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
 import com.mindhub.homebanking.repositories.LoanRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
 public class HomebankingApplication {
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
@@ -26,10 +30,12 @@ public class HomebankingApplication {
 //			clientRepository.save(new Client("melba@mindhub.com","Melba","Morel"));
 //			clientRepository.save(new Client("espinosa@hotmail.com","Cristian","Espinosa"));
 			//no anidado como en el workshop
-			Client client1 = new Client("melba@mindhub.com", "Melba", "Morel");
+			Client client1 = new Client("melba@mindhub.com", "Melba", "Morel", passwordEncoder.encode("1234"));
 			clientRepository.save(client1);
-			Client client2 = new Client("espinosa@hotmail.com", "Cris", "Tian");
+			Client client2 = new Client("espinosa@hotmail.com", "Cris", "Tian", passwordEncoder.encode("2345"));
 			clientRepository.save(client2);
+			Client client3 = new Client("admin@admin.com", "Admin", "Admin", passwordEncoder.encode("3456"));
+			clientRepository.save(client3);
 
 //			anidado no funciona, da error, no reconoce el objeto client
 
