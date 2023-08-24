@@ -22,60 +22,40 @@ public class WebAuthorization{
         http.authorizeRequests()
                 .antMatchers("/web/index.html", "/web/css/**", "/web/img/**", "/web/js/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/login", "/api/clients").permitAll()
-                .antMatchers("/api/clients/current").hasAuthority("CLIENT")
-                .antMatchers("/api/clients/{id}", "/web/**").hasAnyAuthority("CLIENT", "ADMIN")
+                .antMatchers("/api/clients/current", "/web/**").hasAnyAuthority("CLIENT", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/logout").permitAll()
-                .antMatchers("/admin/**", "/rest/**", "/h2-console").hasAuthority("ADMIN");
-
-//                .antMatchers("/web/index.html","/web/css/**","/web/img/**","/web/js/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/login", "/api/clients").permitAll()
-//                .antMatchers("/api/clients/current").hasAuthority("CLIENT")
-//                .antMatchers("/api/accounts/**").hasAuthority("CLIENT")
-//                .antMatchers("/web/**").hasAnyAuthority("CLIENT","ADMIN")
-//                .antMatchers(HttpMethod.POST, "/api/logout").hasAnyAuthority("CLIENT","ADMIN")
-//                .antMatchers("/**").hasAuthority("ADMIN");
+                .antMatchers("/api/clients", "/admin/**", "/rest/**").hasAuthority("ADMIN");
         http.formLogin()
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .loginPage("/api/login");
         http.logout().logoutUrl("/api/logout");
-        // turn off checking for CSRF tokens
 
+        // turn off checking for CSRF tokens
         http.csrf().disable();
 
         //disabling frameOptions so h2-console can be accessed
-
         http.headers().frameOptions().disable();
 
         // if user is not authenticated, just send an authentication failure response
-
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
         // if login is successful, just clear the flags asking for authentication
-
         http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
 
         // if login fails, just send an authentication failure response
-
         http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
         // if logout is successful, just send a success response
-
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 
         return http.build();
-
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
-
         HttpSession session = request.getSession(false);
-
         if (session != null) {
-
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-
         }
-
     }
 }
