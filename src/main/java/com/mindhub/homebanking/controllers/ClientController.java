@@ -1,6 +1,5 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
@@ -14,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,14 +46,30 @@ public class ClientController {
     public ResponseEntity<Object> register(
             @RequestParam String email, @RequestParam String firstName,
             @RequestParam String lastName, @RequestParam String password){
+        // verify that no field is left blank
         if (email.isBlank() || firstName.isBlank() || lastName.isBlank() || password.isBlank()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
+        // verify that the future client, has no other entry in the database, matching by email.
         if (clientRepository.findByEmail(email)!= null ){
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
+        // generete the new client, with encode password
         Client newClient = new Client(email, firstName, lastName, passwordEncoder.encode(password));
+        // Create a new Accountfor the new client
+       // Account newAccount = new Account(null, LocalDate.now(), 0.0);
+        Account newAccount;
+        do{
+            newAccount = new Account(null, LocalDate.now(), 0.0);
+        }while(accountRepository.existsByNumber(newAccount.getNumber()));
+        //verify that the id of the new account is not being used for an existing account in the database
+//        if (accountRepository.existsByNumber(newAccount.getNumber())) { //cambiar por do/while?
+//            return new ResponseEntity<>("Account number already in use",HttpStatus.FORBIDDEN);
+//        }
+        //
+        newClient.addAccount(newAccount); // Agregar la nueva cuenta al cliente
         clientRepository.save(newClient);
+        accountRepository.save(newAccount);
         return new ResponseEntity<>("New client created successfully",HttpStatus.CREATED);
     }
 

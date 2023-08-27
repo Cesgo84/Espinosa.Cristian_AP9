@@ -42,11 +42,15 @@ public class AccountController {
    @PostMapping("/clients/current/accounts")
         public ResponseEntity<String> createAccount(Authentication authentication) {
         // create new Account
-        Account newAccount = new Account(null, LocalDate.now(), 0.0);
+//        Account newAccount = new Account(null, LocalDate.now(), 0.0);
         // verify if the account number is already in use in the database
-        if (accountRepository.existsByNumber(newAccount.getNumber())) {
-           return new ResponseEntity<>("Account number already in use",HttpStatus.FORBIDDEN);
-        }
+       Account newAccount;
+       do{
+           newAccount = new Account(null, LocalDate.now(), 0.0);
+       }while(accountRepository.existsByNumber(newAccount.getNumber()));
+//        if (accountRepository.existsByNumber(newAccount.getNumber())) {
+//           return new ResponseEntity<>("Account number already in use",HttpStatus.FORBIDDEN);
+//        }
         // get current Client
         Client currentClient = clientRepository.findByEmail(authentication.getName());
         //verify that currentClient don't have more than 3 accounts
