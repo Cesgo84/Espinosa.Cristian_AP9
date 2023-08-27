@@ -22,14 +22,17 @@ public class WebAuthorization{
         http.authorizeRequests()
                 .antMatchers("/web/index.html", "/web/css/**", "/web/img/**", "/web/js/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/login", "/api/clients").permitAll()
+                .antMatchers("/api/clients/current/accounts").hasAuthority("CLIENT")
                 .antMatchers("/api/clients/current", "/web/**").hasAnyAuthority("CLIENT", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/logout").permitAll()
-                .antMatchers("/api/clients", "/admin/**", "/rest/**").hasAuthority("ADMIN");
+                .antMatchers("/api/clients", "/admin/**", "/rest/**").hasAuthority("ADMIN")
+                .anyRequest().denyAll();
+
         http.formLogin()
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .loginPage("/api/login");
-        http.logout().logoutUrl("/api/logout");
+        http.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID");
 
         // turn off checking for CSRF tokens
         http.csrf().disable();
