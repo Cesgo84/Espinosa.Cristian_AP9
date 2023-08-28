@@ -38,7 +38,7 @@ public class AccountController {
     }
 
    @PostMapping("/clients/current/accounts")
-        public ResponseEntity<String> createAccount(Authentication authentication) {
+        public ResponseEntity<Object> createAccount(Authentication authentication) {
         // create new Account and verify if the account number is already in use in the database until found a free number
        Account newAccount;
        do{
@@ -52,7 +52,6 @@ public class AccountController {
         }
         // Add newAccount to currentClient and save it in the Data Base
         currentClient.addAccount(newAccount);
-        clientRepository.save(currentClient);
         accountRepository.save(newAccount);
         return new ResponseEntity<>("Account created successfully",HttpStatus.CREATED);
    }
