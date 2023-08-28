@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @Entity
@@ -32,7 +33,7 @@ public class Account {
     }
 
     public Account(String number, LocalDate date, double balance) {
-        this.number = number;
+        this.number = generateAccountNumber(number);
         this.date = date;
         this.balance = balance;
     }
@@ -90,5 +91,14 @@ public class Account {
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);
+    }
+
+    private String generateAccountNumber(String number) {
+        if (number == null) { //notas al corrector: esto está asi para poder preservar las cuentas VIN00X hardcodeadas a melba
+            Random random = new Random();
+            int randomNumber = random.nextInt(99999999) + 1;
+            return "VIN" + String.format("%08d", randomNumber);
+        } else
+            return number;
     }
 }

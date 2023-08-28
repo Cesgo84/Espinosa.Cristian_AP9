@@ -2,15 +2,17 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
+import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,6 +20,9 @@ import java.util.stream.Collectors;
 public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/accounts")
     public List<AccountDTO> getAccounts() {
@@ -31,4 +36,25 @@ public class AccountController {
     public AccountDTO getAccountById(@PathVariable long id){
          return new AccountDTO(accountRepository.findById(id).get());
     }
+
+   @PostMapping("/clients/current/accounts")
+        public ResponseEntity<String> createAccount(Authentication authentication) {
+        // create new Account and verify if the account number is already in use in the database until found a free number
+       Account newAccount;
+       do{
+           newAccount = new Account(null, LocalDate.now(), 0.0);
+       }while(accountRepository.existsByNumber(newAccount.getNumber()));
+        // get current Client
+        Client currentClient = clientRepository.findByEmail(authentication.getName());
+        //verify that currentClient don't have more than 3 accounts
+        if (currentClient.getAccounts().size()>=3){
+           return new ResponseEntity<>("you already reach the number of accounts allowed (3).",HttpStatus.FORBIDDEN);
+        }
+        // Add newAccount to currentClient and save it in the Data Base
+        currentClient.addAccount(newAccount);
+        clientRepository.save(currentClient);
+        accountRepository.save(newAccount);
+        return new ResponseEntity<>("Account created successfully",HttpStatus.CREATED);
+   }
+
 }

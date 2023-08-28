@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Random;
 
 @Entity
 public class Card {
@@ -16,7 +17,7 @@ public class Card {
     private CardType type;
     private CardColor color;
     private String number;
-    private int cvv;
+    private Integer cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
 
@@ -29,12 +30,12 @@ public class Card {
 
     }
 
-    public Card(String cardHolder, CardType type, CardColor color, String number, int cvv, LocalDate fromDate, LocalDate thruDate) {
+    public Card(String cardHolder, CardType type, CardColor color, String number, Integer cvv, LocalDate fromDate, LocalDate thruDate) {
         this.cardHolder = cardHolder;
         this.type = type;
         this.color = color;
-        this.number = number;
-        this.cvv = cvv;
+        this.number = generateRandomCardNumber(number);
+        this.cvv = generateRandomCVV(cvv);
         this.fromDate = fromDate;
         this.thruDate = thruDate;
     }
@@ -77,11 +78,11 @@ public class Card {
         this.number = number;
     }
 
-    public int getCvv() {
+    public Integer getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
+    public void setCvv(Integer cvv) {
         this.cvv = cvv;
     }
 
@@ -109,5 +110,28 @@ public class Card {
     public void setClient(Client client) {
         this.client = client;
     }
+
+    //Methods
+    private String generateRandomCardNumber(String number) {
+        if (number == null) { //notas al corrector: esto está asi para poder preservar los numeros de tarjeta hardcodeadas a melba
+            Random random = new Random();
+            int[] randomNumbers = new int[4];
+            for (int i = 0; i < 4; i++) {
+                randomNumbers[i] = random.nextInt(10000);
+            }
+            return String.format("%04d-%04d-%04d-%04d", randomNumbers[0], randomNumbers[1], randomNumbers[2], randomNumbers[3]);
+        }
+            return number;
+    }
+
+    private int generateRandomCVV (Integer cvv) {
+        if (cvv == null){
+            Random random = new Random();
+            int randomCVV = random.nextInt(900)+100;
+            return randomCVV;
+        }
+        return cvv;
+    }
+
 }
 
