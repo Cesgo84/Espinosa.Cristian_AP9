@@ -56,18 +56,13 @@ public class ClientController {
         }
         // generete the new client, with encode password
         Client newClient = new Client(email, firstName, lastName, passwordEncoder.encode(password));
-        // Create a new Accountfor the new client
-       // Account newAccount = new Account(null, LocalDate.now(), 0.0);
+        // Create a new Account for the new client and verify that the id of the new account is not being used for an existing account in the database
         Account newAccount;
         do{
             newAccount = new Account(null, LocalDate.now(), 0.0);
         }while(accountRepository.existsByNumber(newAccount.getNumber()));
-        //verify that the id of the new account is not being used for an existing account in the database
-//        if (accountRepository.existsByNumber(newAccount.getNumber())) { //cambiar por do/while?
-//            return new ResponseEntity<>("Account number already in use",HttpStatus.FORBIDDEN);
-//        }
-        //
-        newClient.addAccount(newAccount); // Agregar la nueva cuenta al cliente
+        // Add account to the client, save client and account in their according database
+        newClient.addAccount(newAccount);
         clientRepository.save(newClient);
         accountRepository.save(newAccount);
         return new ResponseEntity<>("New client created successfully",HttpStatus.CREATED);

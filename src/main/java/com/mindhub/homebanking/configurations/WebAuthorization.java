@@ -22,12 +22,11 @@ public class WebAuthorization{
         http.authorizeRequests()
                 .antMatchers("/web/index.html", "/web/css/**", "/web/img/**", "/web/js/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/login", "/api/clients").permitAll()
-                .antMatchers("/api/clients/current/accounts").hasAuthority("CLIENT")
-                .antMatchers("/api/clients/current", "/web/**").hasAnyAuthority("CLIENT", "ADMIN")
+                .antMatchers("/api/clients/current/**", "/web/**").hasAnyAuthority("CLIENT", "ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/clients/current/accounts", "/api/clients/current/cards").hasAnyAuthority("CLIENT","ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/logout").permitAll()
                 .antMatchers("/api/clients", "/admin/**", "/rest/**").hasAuthority("ADMIN")
                 .anyRequest().denyAll();
-
         http.formLogin()
                 .usernameParameter("email")
                 .passwordParameter("password")

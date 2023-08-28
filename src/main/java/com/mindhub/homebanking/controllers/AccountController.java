@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,20 +39,15 @@ public class AccountController {
 
    @PostMapping("/clients/current/accounts")
         public ResponseEntity<String> createAccount(Authentication authentication) {
-        // create new Account
-//        Account newAccount = new Account(null, LocalDate.now(), 0.0);
-        // verify if the account number is already in use in the database
+        // create new Account and verify if the account number is already in use in the database until found a free number
        Account newAccount;
        do{
            newAccount = new Account(null, LocalDate.now(), 0.0);
        }while(accountRepository.existsByNumber(newAccount.getNumber()));
-//        if (accountRepository.existsByNumber(newAccount.getNumber())) {
-//           return new ResponseEntity<>("Account number already in use",HttpStatus.FORBIDDEN);
-//        }
         // get current Client
         Client currentClient = clientRepository.findByEmail(authentication.getName());
         //verify that currentClient don't have more than 3 accounts
-        if (currentClient.getAccounts().size()>=3){ // I've used ">=" to trigger 403 even if there are more than 3 accounts (e.g. 4 hardcoded accounts)
+        if (currentClient.getAccounts().size()>=3){
            return new ResponseEntity<>("you already reach the number of accounts allowed (3).",HttpStatus.FORBIDDEN);
         }
         // Add newAccount to currentClient and save it in the Data Base
@@ -65,13 +58,3 @@ public class AccountController {
    }
 
 }
-
-//            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
-//        }
-//        if (accountRepository.existsByNumber(number)){
-//            return new ResponseEntity<>("Number already in use", HttpStatus.FORBIDDEN);
-//        }
-////        accountRepository.save(new Account(number, firstName, lastName, passwordEncoder.encode(password)));
-////        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
-

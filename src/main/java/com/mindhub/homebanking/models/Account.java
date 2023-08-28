@@ -94,7 +94,7 @@ public class Account {
     }
 
     private String generateAccountNumber(String number) {
-        if (number == null) {
+        if (number == null) { //notas al corrector: esto está asi para poder preservar las cuentas VIN00X hardcodeadas a melba
             Random random = new Random();
             int randomNumber = random.nextInt(99999999) + 1;
             return "VIN" + String.format("%08d", randomNumber);
