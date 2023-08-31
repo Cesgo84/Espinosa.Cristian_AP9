@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class TransactionDTO {
     //attributes
@@ -14,7 +15,7 @@ public class TransactionDTO {
     private TransactionType type;
     private double amount;
     private String description;
-    private LocalDate date;
+    private LocalDateTime date;
 
     //transaction's "Owner"
     private Account account;
@@ -44,7 +45,7 @@ public class TransactionDTO {
         return description;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
