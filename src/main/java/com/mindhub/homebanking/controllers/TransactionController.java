@@ -84,14 +84,16 @@ public class TransactionController {
             return new ResponseEntity<>("Insufficient funds in source account", HttpStatus.FORBIDDEN);
         }
 
-        // Create debit transaction for Origin account
-        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, amount, description, LocalDateTime.now());
+        /// Create debit transaction for Origin account
+        String debitDescription = "DEBIT: " + fromAccountNumber + " | " + description;
+        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount, debitDescription, LocalDateTime.now());
         debitTransaction.setAccount(fromAccount);
         fromAccount.addTransaction(debitTransaction);
         fromAccount.setBalance(fromAccount.getBalance() - amount);
 
         // Create credit transaction for destination account
-        Transaction creditTransaction = new Transaction(TransactionType.CREDIT, amount, description, LocalDateTime.now());
+        String creditDescription = "CREDIT: " + toAccountNumber + " | " + description;
+        Transaction creditTransaction = new Transaction(TransactionType.CREDIT, amount, creditDescription, LocalDateTime.now());
         creditTransaction.setAccount(toAccount);
         toAccount.addTransaction(creditTransaction);
         toAccount.setBalance(toAccount.getBalance() + amount);
