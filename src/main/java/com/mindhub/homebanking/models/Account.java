@@ -52,7 +52,7 @@ public class Account {
         this.number = number;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getCreationDate() {
         return date;
     }
 

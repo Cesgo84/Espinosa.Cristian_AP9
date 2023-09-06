@@ -32,8 +32,8 @@ public class ClientLoan {
     }
 
     public ClientLoan(Integer payments, double amount) {
-        this.payments = payments;
         this.amount = amount;
+        this.payments = payments;
     }
 
     //getter & setter

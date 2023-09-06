@@ -1,6 +1,7 @@
-package com.mindhub.homebanking.models;
+package com.mindhub.homebanking.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mindhub.homebanking.models.ClientLoan;
+import com.mindhub.homebanking.models.Loan;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,9 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-public class Loan {
-    @Id
+public class LoanDTO {
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
@@ -27,13 +27,11 @@ public class Loan {
     private Set<ClientLoan> clientLoans = new HashSet<>();
 
     //constructors
-    public Loan() {
-    }
-
-    public Loan(String name, double maxAmount, List<Integer> payments) {
-        this.name = name;
-        this.maxAmount = maxAmount;
-        this.payments = payments;
+    public LoanDTO(Loan loan) {
+        this.id = loan.getId();
+        this.name = loan.getName();
+        this.maxAmount = loan.getMaxAmount();
+        this.payments = loan.getPayments();
     }
 
     //getter & setter
@@ -46,38 +44,13 @@ public class Loan {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getMaxAmount() {
         return maxAmount;
-    }
-
-    public void setMaxAmount(double maxAmount) {
-        this.maxAmount = maxAmount;
     }
 
     //downstream
     public List<Integer> getPayments() {
         return payments;
-    }
-
-    public void setPayments(List<Integer> payments) {
-        this.payments = payments;
-    }
-
-    public Set<ClientLoan> getClients() {
-        return clientLoans;
-    }
-
-    public void setClients(Set<ClientLoan> clients) {
-        this.clientLoans = clients;
-    }
-
-    public void addClient(ClientLoan client) {
-        client.setLoan(this);
-        clientLoans.add(client);
     }
 
 }
