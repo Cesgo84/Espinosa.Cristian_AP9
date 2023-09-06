@@ -52,7 +52,7 @@ public class Account {
         this.number = number;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getCreationDate() {
         return date;
     }
 
@@ -97,7 +97,7 @@ public class Account {
         if (number == null) { //notas al corrector: esto está asi para poder preservar las cuentas VIN00X hardcodeadas a melba
             Random random = new Random();
             int randomNumber = random.nextInt(99999999) + 1;
-            return "VIN" + String.format("%08d", randomNumber);
+            return "VIN-" + String.format("%08d", randomNumber);
         } else
             return number;
     }

@@ -24,7 +24,7 @@ public class AccountDTO {
     public AccountDTO(Account account) {
         this.id = account.getId();
         this.number = account.getNumber();
-        this.date = account.getDate();
+        this.date = account.getCreationDate();
         this.balance = account.getBalance();
 
         // getting a transactionDTO for each transaction in transactions's set
@@ -43,7 +43,7 @@ public class AccountDTO {
         return number;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getCreationDate() {
         return date;
     }
 

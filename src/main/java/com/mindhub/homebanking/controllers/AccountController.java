@@ -33,8 +33,18 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDTO getAccountById(@PathVariable long id){
+    public AccountDTO getAccountByOwner(@PathVariable long id){
          return new AccountDTO(accountRepository.findById(id).get());
+    }
+
+    @GetMapping("/clients/current/accounts")
+    @ResponseBody
+    public List<AccountDTO> getCurrentClientAccounts(Authentication authentication) {
+        // get current client's Accounts
+        return clientRepository.findByEmail(authentication.getName()).getAccounts()
+                .stream()
+                .map(account -> new AccountDTO(account))
+                .collect(Collectors.toList());
     }
 
    @PostMapping("/clients/current/accounts")

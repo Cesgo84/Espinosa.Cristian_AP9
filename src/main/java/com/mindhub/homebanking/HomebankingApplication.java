@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootApplication
@@ -43,27 +44,27 @@ public class HomebankingApplication {
 //			accountRepository.save(client1.addAccount(new Account("VIN001", LocalDate.now(),5000)));
 //			accountRepository.save(new Account("VIN002", LocalDate.now().plusDays(1),7500));
 
-			Account account1 = new Account("VIN001", LocalDate.now(), 5000);
+			Account account1 = new Account("VIN-001", LocalDate.now(), 5000);
 			client1.addAccount(account1);
 			accountRepository.save(account1);
-			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500);
+			Account account2 = new Account("VIN-002", LocalDate.now().plusDays(1), 7500);
 			client1.addAccount(account2);
 			accountRepository.save(account2);
-			Account account3 = new Account("VIN003", LocalDate.now().minusDays(2), 6000);
+			Account account3 = new Account("VIN-003", LocalDate.now().minusDays(2), 6000);
 			client2.addAccount(account3);
 			accountRepository.save(account3);
 
 			//transactions
-			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 1000, "this is only a test part1", LocalDate.now());
+			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 1000, "this is only a test part1", LocalDateTime.now());
 			account1.addTransaction(transaction1);
 			transactionRepository.save(transaction1);
-			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 500, "this is only a test part2", LocalDate.now());
+			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 500, "this is only a test part2", LocalDateTime.now());
 			account1.addTransaction(transaction2);
 			transactionRepository.save(transaction2);
-			Transaction transaction3 = new Transaction(TransactionType.DEBIT, 1000, "this is only a test part1", LocalDate.now());
+			Transaction transaction3 = new Transaction(TransactionType.DEBIT, 1000, "this is only a test part1", LocalDateTime.now());
 			account3.addTransaction(transaction3);
 			transactionRepository.save(transaction3);
-			Transaction transaction4 = new Transaction(TransactionType.CREDIT, 500, "this is only a test part2", LocalDate.now());
+			Transaction transaction4 = new Transaction(TransactionType.CREDIT, 500, "this is only a test part2", LocalDateTime.now());
 			account3.addTransaction(transaction4);
 			transactionRepository.save(transaction4);
 

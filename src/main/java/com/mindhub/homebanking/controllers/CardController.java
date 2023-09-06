@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.CardColor;
 import com.mindhub.homebanking.models.CardType;
@@ -10,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +25,32 @@ public class CardController {
 
     @Autowired
     ClientRepository clientRepository;
+
+    @GetMapping("/cards")
+    public List<CardDTO> getCards() {
+        return cardRepository.findAll()
+                .stream()
+                .map(client -> new CardDTO(client))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/cards/{id}")
+    public CardDTO getCardById(@PathVariable long id) {
+        return new CardDTO(cardRepository.findById(id).get());
+    }
+
+    @GetMapping("/clients/current/cards")
+    @ResponseBody
+    public List<CardDTO> getCurrentClientCards(Authentication authentication) {
+        // get authenticated client
+        Client currentClient = clientRepository.findByEmail(authentication.getName());
+
+        // get current client's cards
+        return currentClient.getCards()
+                .stream()
+                .map(card -> new CardDTO(card))
+                .collect(Collectors.toList());
+    }
 
     @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> createCard(@RequestParam CardType cardType, @RequestParam CardColor cardColor, Authentication authentication) {
